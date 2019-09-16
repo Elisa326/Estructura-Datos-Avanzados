@@ -1,126 +1,84 @@
-package ejercicios;
-
-public class ordenamiento {
-
-    public static int[] ordenarArreglo(int[] arr) {
-
-        for (int j = 0; j < arr.length - 1; j++) {
-            int menor = arr[j];
-            int ind = j;
-            for (int i = j + 1; i < arr.length; i++) {
-                if (menor > arr[i]) {
-                    menor = arr[i];
-                    ind = i;
-                    int auxi = arr[j];
-                    arr[j] = arr[i];
-                    arr[i] = auxi;
-                }
-            }
-        }
-        return arr;
-    }
-    
-    public static int[] ordenarLapsosArreglo(int[] arr){
-        for(int i = 0; i < arr.length - 1; i++){
-            if(arr[i] > arr[i + 1]){
-                int aux = arr[i + 1];
-                int j = i + 1;
-                while(j > 0 && arr[j - 1] > aux ){
-                    arr[j] = arr[j - 1];
-                    j--;
-                }
-                arr[j] = aux;                  
-            }
-        }
-        return arr;
-    }
-    public static int[] ordenarPorParejas(int[] arr) {
-       
-        boolean cambio = true;
-        while (cambio) {
-            cambio = false;
-            for (int i = 0; i < arr.length - 1; i++) {
-                if (arr[i] > arr[i + 1]) {
-                    int aux = arr[i + 1];
-                    arr[i + 1] = arr[i];
-                    arr[i] = aux;
-                    cambio = true;
-                }
-            }
-        }
-        return arr;
-    }
-    
-    public static String imprimeArray(int[] arr) {
-        StringBuilder res = new StringBuilder();
-        res.append("{");
-        for (int i = 0; i < arr.length; i++) {
-            res.append(arr[i]).append("  ");
-        }
-        res.append("}");
-        return res.toString();
-    }
+public class OrdenamientoAUsar <T extends Comparable<T>> {
 
     public static void main(String[] args) {
-        int[] arr = new int[]{25, 2000, 3, 33, -1, 666, 51, 777, 10};
-        System.out.println(imprimeArray(arr));
-        System.out.println(imprimeArray(ordenarPorParejas(arr)));
+
+        T[] arr = new T[8];
+        arr[0] = 303;
+        arr[1] = 30;
+        arr[2] = 430;
+        arr[3] = 103;
+        arr[4] = 4;
+        arr[5] = 13;
+        arr[6] = 4300;
+        arr[7] = 10;
+        for (int j = 0; j < arr.length; j++) {
+            System.out.print(arr[j] + " ");
+        }
+        System.out.println(" ");
+
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        
+        selectionSort(arr);
+
     }
     
-    public static int[] ordenaRecursiva(int[] arr){
-        return ordenaRecursiva(arr, 0, arr.length - 1);
-    } 
     
     
-    
-    //Ordena y luego agrega al arreglo
-    private static int[] ordenaRecursiva(int[] arr, int inf, int sup){
-        //System.out.println(imprimeArray(arr));
-        //System.out.println("inferior = " + inf + "\nsuperior = " + sup);
-        if (inf < sup) {
 
-            int base = arr[inf];
-            //System.out.println("base = " + base);
-            int[] menores = new int[sup - inf + 1];
-            int tMe = 0;
-            int[] mayores = new int[sup - inf + 1];
-            int tMa = 0;
-            for (int i = inf + 1; i <= sup; i++) {
-                if (arr[i] <= base) {
-                    menores[tMe] = arr[i];
-                    //System.out.println("Menores agrega: " + arr[i]);
-                    tMe++;
-                } else {
-                    mayores[tMa] = arr[i];
-                    //System.out.println("Mayores agrega: " + arr[i]);
-                    tMa++;
+    //SELECTION-SORT:
+    public  void selectionSort(T[] arr) {
+        int min;
+        T aux;
+        for (int i = 0; i < arr.length; i++) {
+            min = i;
+            for (int j = i + 1; j < arr.length; j++) {
+                if (arr[j].compareTo(arr[min]) < 0) {
+                    min = j;
                 }
             }
-            menores = ordenaRecursiva(menores, 0, tMe - 1);
-            mayores = ordenaRecursiva(mayores, 0, tMa - 1);
-            //System.out.println("tMe = " + tMe + "\ntMa = " + tMa);
-            
-            for (int j = 0; j < tMe + tMa + 1; j++) {
-                if (j < tMe) {
-                    arr[j] = menores[j];
-                } else if (j == tMe) {
-                    arr[j] = base;
-                } else {
-                    
-                    arr[j] = mayores[j - tMe - 1]; 
+            aux = arr[i];
+            arr[i] = arr[min];
+            arr[min] = aux;
+        }
+    }
+
+    public static <T> void insertionSort(T[] arr) {
+        int rec, pos;
+        T aux;
+        for (int i = 0; i < arr.length - 1; i++) {
+            rec = i;
+            pos = i + 1;
+            while (rec >= 0 && arr[rec].compareTo(arr[pos]) > 0) {
+                aux = arr[rec];
+                arr[rec] = arr[pos];
+                arr[pos] = aux;
+                rec--;
+                pos--;
+            }
+        }
+    }
+    //CLASSICAL-BUBBLE-SORT:
+
+    public void bubbleSort(T[] arr) {
+        T aux;
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - i - 1; j++) {
+                if (arr[j].compareTo(arr[j + 1]) > 0) {
+                    aux = arr[j + 1];
+                    arr[j + 1] = arr[j];
+                    arr[j] = aux;
                 }
             }
         }
-        return arr;
-    
+
     }
-    
-    
-    
-    
-    
-    
-    public static int[] quickSort(int[] arr) {
+    //QUICK-SORT:
+
+    /* Complejidad: O(n^2)
+        ** Nota: Para que un hacker no abuse de mi método hay que agarrar un número aleatorio. */
+public static int[] quickSort(int[] arr) {
         return quickSort(arr, 0, arr.length - 1);
     }
 
@@ -144,6 +102,129 @@ public class ordenamiento {
         
         return arr;
     }
+    //RECURSIVE MERGE_SORT:
+
+   public static void mergeSort1(int[] arr){
+        mergeSort(arr, 0, arr.length - 1);
+    }
     
-    
+    private static void mergeSort(int[] arr, int inf, int sup) {
+        int[] temp;
+        int indice, izq, der;
+        if (inf == sup) {
+
+            return;
+        }
+        int tam = sup - inf + 1;
+        int mit = (sup + inf) / 2;
+        temp = new int[tam];
+        
+        mergeSort(arr, inf, mit); 
+        mergeSort(arr, mit + 1, sup);
+        indice = 0;
+        izq = inf;
+        der = mit + 1;
+        
+       
+        while (indice < tam) {
+             
+            if (izq <= mit && der <= sup) {
+                
+                if (arr[izq] < arr[der]) {
+                    
+                    temp[indice] = arr[izq];
+                    izq++;
+                } else {
+                   
+                    temp[indice] = arr[der];
+                    der++;
+                }
+            }
+            else if(izq == mit + 1){
+                
+               temp[indice] = arr[der];
+                der++;
+            }
+            else{   
+                temp[indice] = arr[izq];
+                izq++;
+            }
+            indice++;
+            for(int ha = 0; ha < arr.length; ha++)
+                 System.out.print(arr[ha]+ " ");
+            System.out.println(" ");
+        }
+        for(int i = 0; i < tam; i++){
+            arr[i + inf] = temp[i];
+            for(int ha = 0; ha < arr.length; ha++)
+                 System.out.print(arr[ha]+ " ");
+            System.out.println(" ");
+        }       
+    }
+
+    //ITERATIVE MERGE_SORT:
+    /*Merge subarrays in bottom up manner. First merge subarrays of size 1 to create sorted  
+          subarrays of size 2, then merge subarrays of size 2 to create sorted subarrays of size 4, 
+          and so on. */
+    public void iterativeMergeSort(T arr[]) {
+        int n = arr.length;
+        // For current size of subarrays to be merged curr_size varies from  1 to n/2 
+        for (int curr_size = 1; curr_size <= n - 1; curr_size = 2 * curr_size) {
+
+            // Pick starting point of different subarrays of current size 
+            // For picking starting index of left subarray to be merged 
+            for (int left_start = 0; left_start < n - 1; left_start += 2 * curr_size) {
+                // Find ending point of left subarray. mid+1 is starting point of right: 
+                int mid = Math.min(left_start + curr_size - 1, n - 1);
+
+                int right_end = Math.min(left_start + 2 * curr_size - 1, n - 1);
+
+                // Merge Subarrays arr[left_start...mid] & arr[mid+1...right_end]:
+                merge(arr, left_start, mid, right_end);
+                //mergeDiegoIndices(arr, left_start, right_end);
+
+            }
+        }
+    }
+
+    //MERGE-FUNCTION:
+    /* Function to merge the two haves arr[l..m] and arr[m+1..r] of array arr[] */
+    public void merge(T arr[], int l, int m, int r) {
+        int i, j, k;
+        int n1 = m - l + 1;
+        int n2 = r - m;
+
+        /* create temp arrays */
+        T L[] = (T[]) new Comparable[n1];
+        T R[] = (T[]) new Comparable[n2];
+
+        /* Copy data to temp arrays L[] and R[] */
+        for (i = 0; i < n1; i++) {
+            L[i] = arr[l + i];
+        }
+        for (j = 0; j < n2; j++) {
+            R[j] = arr[m + 1 + j];
+        }
+
+        /* Merge the temp arrays back into arr[l..r]*/
+        i = 0;
+        j = 0;
+        k = l;
+        while (i < n1 && j < n2) {
+            if (L[i].compareTo(R[j]) <= 0) {
+                arr[k++] = L[i++];
+            } else {
+                arr[k++] = R[j++];
+            }
+        }
+        /* Copy the remaining elements of L[], if there are any */
+        while (i < n1) {
+            arr[k++] = L[i++];
+        }
+        /* Copy the remaining elements of R[], if there are any */
+        while (j < n2) {
+            arr[k++] = R[j++];
+        }
+    }
+
 }
